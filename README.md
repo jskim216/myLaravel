@@ -91,54 +91,45 @@
  
  - 참고할 사항으로 뷰단에서도 변경한 인증 필드명으로 바꿔줘야한다. 안그러면 로그인이 되지 않음
  
-8. 
  
+8. 로그인 한 유저의 사용자 조회
+
+ - use Illuminate\Support\Facades\Auth; Auth 파사드를 통해 접근이 가능함.
  
-
+ - $user = Auth::user();
  
+ - $id = Auth::id();
+ 
+ - 또는 Illuminate\Http\Request 인스턴스를 통해 접근 가능하다.
 
 
+9. 현재 사용자 승인 여부 파악
+
+ - 마찬가지로 Auth 파사드의 Auth::check() 메소드를 사용하여 판별 가능 (return bool)
+ 
+ - 해당 함수로 인증을 판단 가능하지만, 일반적으로 라우트 미들웨어를 통해 접근 허용을 제어한다.
 
 
-**AUTH** 
+10. 라우트를 보호하자.
 
-기본적으로 라라벨은 config/auth.php 을 통해 서비스 동작 제어
+ - 라라벨은 auth 미들웨어를 제공
 
-guards 와 provider 로 구성
-
-guard 는 사용자가 각각의 요청-request 마다 어떻게 인증되는지 정의 (session, token 등)
-
-provider 는 저장소에서 어떻게 찾아올지 정의 (Eloquent, database)
-
-
-
-라라벨은 기본적으로 App\Http\Controllers\Auth 에 인증 컨트롤러를 제공.
-사용자를 인증하고 새로운 사용자를 저장하는 로직등 트레이트를 포함
+ - Route::get('checkUser', 'ProfileController@checkUser')->name('checkUser')->middleware('auth');
+ 
+ - 비 로그인 시 로그인 페이지로 이동되는 것을 확인하였다!
+ 
+ - 컨트롤러 클래스를 사용하고 있다면, 라우트에서 정의하지 않고 생성자에서 메소드 호출이 가능하다
 
 
+11. 라라벨의 인증 컨트롤러를 사용하지 않는다면?
 
-라우팅 make
-
-php artisan make:auth
-
-위와 같은 명령어를 통해 auth 컨트롤러를 생성하자
-이때 HomeController 가 생성된다.
-
-make:auth 명령어는 인증에 필요로 하는 모든 뷰를 생성해준다 (레이아웃도 생성)
-
+ - 걱정하지마라, Auth 파사드를 이용하여 쉽게 인증처리가 가능하다
+ 
+ - attempt 메소드를 활용하여 처리 가능
+ 
+ - attempt 메소드는 키 / 값의 쌍으로 이루어진 배열을 첫번째 인자로 전달 받음 (Auth::attempt(['email' => $email, 'password' => $password]))
+ 
+ - 부가적인 조건들 추가가능
 
 
-인증 후 경로 수정
-
-AuthController 의 redirectTo 속성을 정의함으로써 경로 커스터마이징 가능
-
-protected $redirectTo = '/home';
-
-또는 redirectTo 속성 대신에 redirectTo 메소드를 정의하여 커스터마이징 가능
-이때 정의된 속성보다 정의된 메소드가 우선시 됨
-
-protected function redirectTo()
-{
-    return '/home';
-}
-
+12. 
