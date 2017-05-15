@@ -18,8 +18,8 @@ class ProfileController extends Controller
     public function userInfo(Request $request)
     {
 //        $user = $request->user();
-        $id = $request->user();
-        print_r($id);
+        $user = $request->user();
+        print_r($user->id);
     }
 
     public function checkUser()
