@@ -130,6 +130,3 @@
  - attempt 메소드는 키 / 값의 쌍으로 이루어진 배열을 첫번째 인자로 전달 받음 (Auth::attempt(['email' => $email, 'password' => $password]))
  
  - 부가적인 조건들 추가가능
-
-
-12. 
